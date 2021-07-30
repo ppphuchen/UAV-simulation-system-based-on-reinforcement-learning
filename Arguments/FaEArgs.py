@@ -8,13 +8,16 @@ def arglists():
     parser.add_argument("--uav_now_num", type=int, default=10, help="UAV默认当前数量", )
     parser.add_argument("--is_wall", type=bool, default=0, help="默认UAV没有撞墙，正常飞行", )
     parser.add_argument("--delta_energy", type=int, default=0, help="默认UAV初始消耗的能量为0", )
-    parser.add_argument("--n_step", type=int, default=1024, help="默认UAV初始可以使用的时隙数", )
     parser.add_argument("--max_line_v", type=float, default=50, help="UAV的最大线速度为50cm/s", )
     parser.add_argument("--max_angle_v", type=float, default=2*np.pi, help="UAV的最大角速度为2π", )
+    parser.add_argument("--init_line_v", type=float, default=0, help="UAV的初始线速度")
+    parser.add_argument("--init_angle_v", type=float, default=0, help="UAV的初始角速度")
     #UAVEnv的具有的默认参数值
     parser.add_argument("--world_size", type=int, default=1000, help="默认的边界范围", )
     parser.add_argument("--max_uav_num", type=int, default=100, help="默认的Env中UAV的最大数量")
     parser.add_argument("--max_poi_num", type=int, default=100, help="默认的Env中PoI的最大数量")
+    parser.add_argument("--n_step", type=int, default=1024, help="默认UAV初始可以使用的时隙数", )
+    parser.add_argument("--now_step", type=int, default=0, help="默认的当前的时隙数")
     #PoI的具有默认值的参数
     parser.add_argument("--poi_exploited_flag", type=bool, default=0, help="标记PoI是否被覆盖，默认值为0未被覆盖", )
     parser.add_argument("--boundary_radius", type=float, default=20, help="PoI的边界范围", )
