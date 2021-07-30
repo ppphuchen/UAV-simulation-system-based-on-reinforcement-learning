@@ -46,22 +46,24 @@ class UAV(Agent):
         # 2π
         
 
-    def reset(self, state):
+    def reset(self, state, arguments):
         """
         利用随机化算法重新设置UAV的位置
 
         :param state: (array)state[0]表示UAV的横坐标，state[1]表示UAV的纵坐标，state[2]表示UAV目前的方向
+        :param init_line_v: (float) UAV的初始线速度为0
+        :param init_angle_v: (float) UAV的初始角速度为0
         """
         self.state.uav_pos = state[0:2]
         self.state.uav_pos[0] = random.randint(0, 100)
         self.state.uav_pos[1] = random.randint(0, 100)
         # 将uav的横纵坐标在0~100里随机选取
         self.state.uav_orientation = state[2]
-        self.state.line_v = 0
-        self.state.angle_v = 0
+        self.state.line_v = arguments.init_line_v
+        self.state.angle_v = arguments.init_angle_v
         # uav飞行线速度和角速度设置为0
-        self.energy = 3
-        self.delta_energy = 0
+        self.energy = arguments.energy
+        self.delta_energy = arguments.delta_energy
         # 重置UAV的能量和消耗的能量
 
     def get_observation(self, distance_from_poi, timestep):
