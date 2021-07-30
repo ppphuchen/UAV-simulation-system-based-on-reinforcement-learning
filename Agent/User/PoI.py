@@ -27,10 +27,10 @@ class PoI(Agent):
         self.covered_time = arguments.covered_time
         self.exploiters = []
         # 存储覆盖该PoI的实例,初始为空
-        self.temp_exploiters= []
+        self.temp_exploiters = []
         self.can_comm = arguments.can_comm
         # 暂存覆盖该PoI的实例,初始为空
-    def reset(self, state):
+    def reset(self, state, arguments):
         """
         重置PoI的位置，被覆盖时间，被覆盖的UAV列表
 
@@ -38,9 +38,9 @@ class PoI(Agent):
         """
         self.state.poi_pos = state[0:2]
         #该PoI的位置
-        self.covered_time = 0
-        self.poi_exploited_flag = 0
-        self.can_comm = 0
+        self.covered_time = arguments.poi_exploited_flag
+        self.poi_exploited_flag = arguments.poi
+        self.can_comm = arguments.can_comm
         self.exploiters = []
         self.temp_exploiters = []
     def exploit_init(self, uav_agents):
