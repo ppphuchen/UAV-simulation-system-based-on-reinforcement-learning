@@ -30,7 +30,7 @@ class PoI(Agent):
         self.temp_exploiters = []
         self.can_comm = arguments.can_comm
         # 暂存覆盖该PoI的实例,初始为空
-    def reset(self, state, arguments):
+    def poi_position_reset(self, state, arguments):
         """
         重置PoI的位置，被覆盖时间，被覆盖的UAV列表
 
@@ -43,14 +43,14 @@ class PoI(Agent):
         self.can_comm = arguments.can_comm
         self.exploiters = []
         self.temp_exploiters = []
-    def exploit_init(self, uav_agents):
+    def exploit_init(self, uav_agents_pos):
         """
         计算所有UAV距离该PoI的距离，
 
         :param uav_agents: (array)UAV智能体的实例组
         :param uav_agents.pos: (array)UAV组的位置信息，其中uav_agents.pos[:, 0]表示UAV智能体组的所有横坐标，uav_agents.pos[:, 1]表示UAV智能体组的所有纵坐标
         """
-        temp_dist_matrix = np.vstack([uav_agents.pos[:, 0:2], self.state.poi_pos])
+        temp_dist_matrix = np.vstack([uav_agents_pos[:, 0:2], self.state.poi_pos])
         # 构成一个n行2列的矩阵，第一列为UAV智能体组以及PoI的横坐标，第二列为UAV智能体以及PoI的纵坐标
 
         distances = ToolFunciton.get_euclid_distances(temp_dist_matrix)
@@ -64,7 +64,7 @@ class PoI(Agent):
             self.poi_exploited_flag = 1
         #PoI范围内存在UAV，就把被探索标志设为1
 
-    def step(self,uav_agents):
+    def step(self, uav_agents_pos, uav_agents_energy):
         """
         PoI进行一次action
 
@@ -72,7 +72,7 @@ class PoI(Agent):
         :return:
         """
         self.exploiters = []
-        temp_dist_matrix = np.vstack([uav_agents.pos[:, 0:2], self.state.poi_pos])
+        temp_dist_matrix = np.vstack([uav_agents_pos[:, 0:2], self.state.poi_pos])
         # 构成一个n行2列的矩阵，第一列为UAV智能体组以及PoI的横坐标，第二列为UAV智能体以及PoI的纵坐标
 
         distances = ToolFunciton.get_euclid_distances(temp_dist_matrix)
@@ -87,7 +87,7 @@ class PoI(Agent):
 
         if len(self.temp_exploiters) > 0:
             for i in self.temp_exploiters:
-                if uav_agents.energy[i] > 0:
+                if uav_agents_energy[i] > 0:
                     uav_have_energy = True
         #寻找PoI范围内具有电量的UAV
 
