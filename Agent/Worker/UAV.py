@@ -46,7 +46,7 @@ class UAV(Agent):
         # 2π
         
 
-    def reset(self, state, arguments):
+    def uav_position_reset(self, state, arguments):
         """
         利用随机化算法重新设置UAV的位置
 
