@@ -9,10 +9,9 @@ class Env(object):
     创造一个Env环境
     """
 
-    def __init__(self, arglist):
+    def __init__(self, arguments):
         """
         初始化Env环境
-
         :param torus: (int) 判断Env是否是循环地图，为1表示Env是循环，为0表示Env不是循环的
         :param world_size: (int) Env中的边界大小
         :param uav_max_num: (int) Env中可以容纳UAV的最大数量
@@ -24,23 +23,33 @@ class Env(object):
         :param uav_now_num: (int)  当前UAV的数量
         :param poi_now_num: (int) 当前poi的数量
         """
-        self.torus = arglist.torus
-        self.world_size = arglist.world_size
-        self.uav_max_num = arglist.uav_max_num
-        self.poi_max_num = arglist.poi_max_num
-        self.n_step = arglist.n_step
-        self.now_step = arglist.now_step
-        self.uav_now_num = arglist.uav_now_num
-        self.poi_now_num = arglist.poi_now_num
-
+        self.torus = arguments.torus
+        self.world_size = arguments.world_size
+        self.uav_max_num = arguments.uav_max_num
+        self.poi_max_num = arguments.poi_max_num
+        self.n_step = arguments.n_step
+        self.now_step = arguments.now_step
+        self.uav_now_num = arguments.uav_now_num
+        self.poi_now_num = arguments.poi_now_num
         self.agents = [UAV(self) for i in range(self.uav_now_num)]
         [self.agents.append(PoI(self)) for _ in range(self.poi_now_num)]
         #创建一个agents列表，前uav_now_num个元素是当前的UAV，后poi_now_num个元素是当前的PoI
-
-    def reset(self):
-        """重置Env，UAV，PoI的位置信息"""
+    def env_reset(self, arguments):
+        self.torus = arguments.torus
+        self.world_size = arguments.world_size
+        self.uav_max_num = arguments.uav_max_num
+        self.poi_max_num = arguments.poi_max_num
+        self.n_step = arguments.n_step
+        self.now_step = arguments.now_step
+        self.uav_now_num = arguments.uav_now_num
+        self.poi_now_num = arguments.poi_now_num
+    def agents_reset(self):
+        """初始化agents"""
         self.agents = [UAV(self) for i in range(self.uav_now_num)]
         [self.agents.append(PoI(self)) for _ in range(self.poi_now_num)]
+
+    def position_reset(self):
+        """重置Env中的UAV，PoI的位置信息"""
         uav_pos = np.zeros((self.uav_now_num, 2))
         poi_pos = np.zeros((100, 2))
         for i in range(10):
@@ -48,7 +57,6 @@ class Env(object):
                    poi_pos[int(i * 10 + j)][0] = 50 + i * 100
                    poi_pos[int(i * 10 + j)][1] = 50 + j * 100
         #重置poi的位置，100个poi均匀分布在1000*1000的地图里
-
         self.uav_pos = uav_pos
         self.poi_pos = poi_pos
         #存入重置后的位置
