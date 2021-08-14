@@ -18,6 +18,7 @@ def arglists():
     parser.add_argument("--max_poi_num", type=int, default=100, help="默认的Env中PoI的最大数量")
     parser.add_argument("--n_step", type=int, default=1024, help="默认UAV初始可以使用的时隙数", )
     parser.add_argument("--now_step", type=int, default=0, help="默认的当前的时隙数")
+    parser.add_argument("--is_terminal", tpye=bool, default=0, help="默认值为0表示游戏正在继续")
     #PoI的具有默认值的参数
     parser.add_argument("--poi_exploited_flag", type=bool, default=0, help="标记PoI是否被覆盖，默认值为0未被覆盖", )
     parser.add_argument("--boundary_radius", type=float, default=20, help="PoI的边界范围", )
