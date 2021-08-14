@@ -72,6 +72,7 @@ class UAV(Agent):
 
         :param distance_from_poi: (array) distance_from_poi[i]表示第i个poi与UAV的距离
         :param timestep: (int) UAV已经使用的时间步数
+        :return obs: (arrays) 第一列为每个poi距离UAV的距离，
         """
 
         dist_to_pois = distance_from_poi[-self.n_evaders:]
@@ -95,23 +96,3 @@ if __name__ == "__main__":
    args = arglists()
    new_UAV = UAV(args)
    print(new_UAV.energy)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
