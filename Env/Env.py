@@ -22,6 +22,7 @@ class Env(object):
         :param boundary_radius: (float) PoI的覆盖范围
         :param uav_now_num: (int)  当前UAV的数量
         :param poi_now_num: (int) 当前poi的数量
+        :param is_terminal: (bool) 当前游戏是否终止，为1终止，为0不终止
         """
         self.torus = arguments.torus
         self.world_size = arguments.world_size
@@ -75,7 +76,10 @@ class Env(object):
         #计算每个UAV的角度
         next_state = get_uav_state(uav_normal_distance, uav_new_angle, self.agents[0:self.uav_now_num], self.now_step)
         #更新经过这一步后的状态
-        return next_state
+        dones = np.zeros(self.uav_now_num)
+        dones[0] = self.is_terminal
+        info = [{}]
+        return next_state, dones, info
 
 if __name__ == "__main__":
     new_Env = Env()
