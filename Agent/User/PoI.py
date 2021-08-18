@@ -17,6 +17,7 @@ class PoI(Agent):
         :param poi_exploited_flag: (bool) 用于标记PoI是否被探索，值为0表示该PoI未被探索，值为1表示该PoI已被探索
         :param covered_time: (int) PoI的被覆盖时间
         :param can_comm: (bool) 表示PoI目前能否正常通信，为0表示不能，为1表示能
+        :param covered_flag:(bool) 表示该PoI目前是否被覆盖，为0表示未被覆盖，为1表示已经被覆盖
         """
         super(PoI, self).__init__()
         # 继承Agent的属性
@@ -81,6 +82,8 @@ class PoI(Agent):
         dist_to_uavs = distances
         self.temp_exploiters = list(np.where(dist_to_uavs < self.boundary_radius)[0])
         # 更新poi范围内的所有UAV实体
+        if len(self.temp_exploiters)>0:
+            self.covered_flag = 1
 
         uav_have_energy = False
         #用来标记PoI范围内是否有具有电量的UAV
