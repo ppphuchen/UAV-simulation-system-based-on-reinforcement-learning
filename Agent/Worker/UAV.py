@@ -2,7 +2,7 @@ import Agent
 import numpy as np
 import random
 from Arguments.FaEArgs import arglists
-
+from Function.ToolFunciton import get_euclid_distances
 class UAV(Agent):
     """
     创建UAV
@@ -46,7 +46,7 @@ class UAV(Agent):
         # 2π
         
 
-    def uav_position_reset(self, state, arguments):
+    def uav_state_reset(self, state, arguments):
         """
         利用随机化算法重新设置UAV的位置
 
@@ -66,18 +66,18 @@ class UAV(Agent):
         self.delta_energy = arguments.delta_energy
         # 重置UAV的能量和消耗的能量
 
-    def get_observation(self, distance_from_poi, timestep):
+    def get_observation(self, uav_pos, pois_pos, timestep):
         """
         计算与环境中所有PoI的距离，并判断此时UAV是否撞墙
 
-        :param distance_from_poi: (array) distance_from_poi[i]表示第i个poi与UAV的距离
+        :param pois_pos: (array) poi_pos[i][0]表示第i个poi的横坐标，poi_pos[i][1]表示第i个poi的纵坐标
+        :param uav_pos: (array) uav_pos[0]表示该UAV的横坐标，uav_pos[1]表示该UAV的纵坐标
         :param timestep: (int) UAV已经使用的时间步数
         :return obs: (arrays) 第一列为每个poi距离UAV的距离，
         """
 
-        dist_to_pois = distance_from_poi[-self.n_evaders:]
+        dist_to_pois = get_euclid_distances(np.vstack(pois_pos, uav_pos))
         # 所有poi距离该UAV的距离
-
         local_obs = np.zeros(2)
         if self.torus is False:
             if np.any(self.state.uav_pos <= 1) or np.any(self.state.uav_pos >= 999):
@@ -91,8 +91,28 @@ class UAV(Agent):
         for i in range(self.poi_now_num):
             normal_dist_to_pois = dist_to_pois[i] / self.obs_radius
         # 计算每个Poi距离UAV的归一化距离
-
+        return dist_to_pois
 if __name__ == "__main__":
    args = arglists()
    new_UAV = UAV(args)
    print(new_UAV.energy)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
