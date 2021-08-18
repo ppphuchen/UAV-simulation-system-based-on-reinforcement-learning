@@ -25,4 +25,5 @@ def arglists():
     parser.add_argument("--poi_now_num", type=int, default=10, help="PoI默认当前数量", )
     parser.add_argument("--covered_time", type=int, default=0, help="PoI的被覆盖时间，默认为0", )
     parser.add_argument("--can_comm", type=bool, default=0, help="标记PoI此时能否正常通信", )
+    parser.add_argument("--covered_flag", type=bool, default=0, help="标记该PoI是否已被UAV覆盖，默认为0表示没有被覆盖")
     return parser.parse_args()
