@@ -5,6 +5,12 @@ from Function.ToolFunciton import get_uav_angle
 from Function.CommFuction import get_uav_state
 import numpy as np
 import torch
+import scipy.io
+import random
+import numpy as np
+import matplotlib.pylab as pylab
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 class Env(object):
     """
     创造一个Env环境
@@ -142,6 +148,81 @@ class Env(object):
                     break
         actions = torch.FloatTensor([[a[0], a[1]] for a in ac])
         # action的第i行的第一列为0.5， 第二列为UAV距离最近的没有被访问过的PoI的角度
+
+    def render(self, agent_pos0):
+        """
+        :param agent_pos0: (array) 第一列为UAV的横坐标，第二列为UAV的纵坐标
+        :return: 
+        """
+        temp_x = agent_pos0[:, 0]
+        temp_y = agent_pos0[:, 1]
+        x0 = temp_x[0: self.uav_now_num]
+        y0 = temp_y[0: self.uav_now_num]
+        myparams = {
+            'axes.labelsize': '20',
+            'xtick.labelsize': '18',
+            'ytick.labelsize': '18',
+            'lines.linewidth': 1.3,
+            'legend.fontsize': '18',
+            'font.family': 'Times New Roman',
+            'figure.figsize': '7, 7',  # 图片尺寸
+            'grid.alpha': 0.1
+
+        }
+        plt.style.use("seaborn-deep")
+        pylab.rcParams.update(myparams)
+        '''
+        params = {
+        'axes.labelsize': '35',
+        'xtick.labelsize': '27',
+        'ytick.labelsize': '27',
+        'lines.linewidth': 2,
+        'legend.fontsize': '27',
+        'figure.figsize': '12, 9'  # set figure size
+        }
+
+        pylab.rcParams.update(params)  # set figure parameter
+        # line_styles=['ro-','b^-','gs-','ro--','b^--','gs--']  #set line style
+        '''
+        plt.plot(x0, y0, marker='^', markersize=6)
+        #所有点形成轨迹
+        plt.plot(x0[0], y0[0], marker='o', markersize=8)
+        #标记初始点
+        fig1 = plt.figure(1)
+        ax_values = [0, 1000, 0, 1000]
+        plt.axis(ax_values)
+        plt.axhline()
+        plt.axvline()
+        # axes = plt.subplot(111)
+        # axes = plt.gca()
+        # axes.set_yticks([0, 50, 100, 150, 200, 250])
+        # axes.set_xticks([0, 50, 100, 150, 200])
+        # axes.grid(True)  # add grid
+
+        plt.legend(loc="lower right")  # set legend location
+        plt.ylabel('y_coordinate')  # set ystick label
+        plt.xlabel('x_coordinate')  # set xstck label
+
+        r = 150 
+        center = (x0[0], y0[0])
+        x = np.linspace(center[0] - r, center[0] + r, 5000)
+        y1 = np.sqrt(r ** 2 - (x - center[0]) ** 2) + center[1]
+        y2 = -np.sqrt(r ** 2 - (x - center[0]) ** 2) + center[1]
+        plt.plot(x, y1, 'k--')
+        plt.plot(x, y2, 'k--')
+        x = center[0]
+        y = center[1]
+        # plt.plot(x, y, color="black", marker="o", markersize=4)
+        
+        for i in range(10):
+            for j in range(10):
+                x = 50 + i * 100
+                y = 50 + j * 100
+                plt.plot(x, y, color="black", marker="o", markersize=6, alpha=0.5)
+        #为PoI作图
+        plt.savefig('plot.pdf', bbox_inches='tight')
+        plt.show()
+
 
 if __name__ == "__main__":
     new_Env = Env()
